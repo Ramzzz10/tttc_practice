@@ -26,6 +26,9 @@ include(AddLLVM)
 
 llvm_map_components_to_libnames(llvm_libs support core)
 
-add_llvm_library(TypeInfoPlugin MODULE TypeInfoPlugin.cpp PLUGIN_TOOL clang)
+add_llvm_library(TypeInfoPlugin MODULE TypeInfoPlugin.cpp PLUGIN_TOOL clang PARTIAL_SOURCES_INTENDED)
 
 target_link_libraries(TypeInfoPlugin PRIVATE ${llvm_libs} clangAST clangBasic clangFrontend)
+
+add_llvm_library(FunctionInstrumenterPass SHARED FunctionInstrumenter.cpp PARTIAL_SOURCES_INTENDED)
+target_link_libraries(FunctionInstrumenterPass PRIVATE ${llvm_libs})
