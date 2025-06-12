@@ -1,6 +1,14 @@
 #include <iostream>
 #include <string>
 
+extern "C" void instrument_start(const char* functionName) {
+  std::cout << "---> ENTER: " << functionName << std::endl;
+}
+
+extern "C" void instrument_end(const char* functionName) {
+  std::cout << "<--- EXIT:  " << functionName << std::endl;
+}
+
 class Base {
 public:
     virtual void method1() {
@@ -35,59 +43,20 @@ public:
         return value;
     }
     
-    ~Derived() override {
+    ~Derived() {
         std::cout << "Derived destructor with value: " << value << std::endl;
     }
 };
 
-template <typename T>
-class Container {
-private:
-    T data;
-    
-public:
-    Container(T val) : data(val) {}
-    
-    T getData() const {
-        return data;
-    }
-    
-    void setData(T val) {
-        data = val;
-    }
-};
-
-class Outer {
-public:
-    class Inner {
-    private:
-        int innerValue;
-        
-    public:
-        Inner(int val) : innerValue(val) {}
-        
-        int getInnerValue() const {
-            return innerValue;
-        }
-    };
-    
-    Inner createInner(int val) {
-        return Inner(val);
-    }
-};
-
 int main() {
-    Derived d1(42);
-    Derived d2(100);
+    std::cout << "--- Program Start ---" << std::endl;
+    Derived d(42);
+    Base* b = &d;
     
-    d1.method1();
-    d1.method2();
+    b->method1();
+    b->method2();
     
-    Container<int> intContainer(123);
-    Container<std::string> strContainer("Hello");
-    
-    Outer outer;
-    Outer::Inner inner = outer.createInner(99);
-    
+    std::cout << "Value from getValue(): " << d.getValue() << std::endl;
+    std::cout << "--- Program End ---" << std::endl;
     return 0;
 }
